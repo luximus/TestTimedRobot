@@ -4,6 +4,9 @@
 
 package frc.robot;
 
+import com.revrobotics.CANSparkMax;
+import com.revrobotics.CANSparkMaxLowLevel.MotorType;
+
 import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.Timer;
@@ -23,9 +26,12 @@ public class Robot extends TimedRobot {
    * This function is run when the robot is first started up and should be used for any
    * initialization code.
    */
-
-    Talon leftDriveMotorController = new Talon(RobotMap.LEFT_DRIVE_MOTOR_CONTROLLER_CHANNEL_ID);
-    Talon rightDriveMotorController = new Talon(RobotMap.RIGHT_DRIVE_MOTOR_CONTROLLER_CHANNEL_ID);
+    CANSparkMax leftFrontDriveMotorController = new CANSparkMax(RobotMap.LEFT_FRONT_DRIVE_MOTOR_CONTROLLER_CAN_ID, MotorType.kBrushless);
+    CANSparkMax leftRearDriveMotorController = new CANSparkMax(RobotMap.LEFT_REAR_DRIVE_MOTOR_CONTROLLER_CAN_ID, MotorType.kBrushless);
+    MotorControllerGroup leftDriveMotorController = new MotorControllerGroup(leftFrontDriveMotorController, leftRearDriveMotorController);
+    CANSparkMax rightFrontDriveMotorController = new CANSparkMax(RobotMap.RIGHT_FRONT_DRIVE_MOTOR_CONTROLLER_CAN_ID, MotorType.kBrushless);
+    CANSparkMax rightRearDriveMotorController = new CANSparkMax(RobotMap.RIGHT_REAR_DRIVE_MOTOR_CONTROLLER_CAN_ID, MotorType.kBrushless);
+    MotorControllerGroup rightDriveMotorController = new MotorControllerGroup(rightFrontDriveMotorController, rightRearDriveMotorController);
     DifferentialDrive driveTrain = new DifferentialDrive(leftDriveMotorController, rightDriveMotorController);
 
     XboxController driverController = new XboxController(RobotMap.DRIVER_CONTROLLER_PORT);
@@ -86,7 +92,12 @@ public class Robot extends TimedRobot {
     }
 
     @Override
-    public void teleopInit() {}
+    public void teleopInit() {
+        leftFrontDriveMotorController.setOpenLoopRampRate(RobotMap.RAMP_RATE);
+        leftRearDriveMotorController.setOpenLoopRampRate(RobotMap.RAMP_RATE);
+        rightFrontDriveMotorController.setOpenLoopRampRate(RobotMap.RAMP_RATE);
+        rightRearDriveMotorController.setOpenLoopRampRate(RobotMap.RAMP_RATE);
+    }
 
     @Override
     public void teleopPeriodic() {
