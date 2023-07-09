@@ -9,13 +9,11 @@ public final class RobotMap {
     public static final int LEFT_REAR_DRIVE_MOTOR_CONTROLLER_CAN_ID = 1;
     public static final int RIGHT_FRONT_DRIVE_MOTOR_CONTROLLER_CAN_ID = 2;
     public static final int RIGHT_REAR_DRIVE_MOTOR_CONTROLLER_CAN_ID = 3;
-
-    // PWM-based motor controller channel IDs
-    public static final int LEFT_INTAKE_MOTOR_CONTROLLER_CHANNEL_ID = 0;
-    public static final int RIGHT_INTAKE_MOTOR_CONTROLLER_CHANNEL_ID = 1;
-    public static final int INDEXER_MOTOR_CONTROLLER_CHANNEL_ID = 2;
-    public static final int SHOOTER_FEED_MOTOR_CONTROLLER_CHANNEL_ID = 3;
-    public static final int SHOOTER_MOTOR_CONTROLLER_CHANNEL_ID = 4;
+    public static final int LEFT_INTAKE_MOTOR_CONTROLLER_CAN_ID = 4;
+    public static final int RIGHT_INTAKE_MOTOR_CONTROLLER_CAN_ID = 5;
+    public static final int INDEXER_MOTOR_CONTROLLER_CAN_ID = 6;
+    public static final int SHOOTER_FEED_MOTOR_CONTROLLER_CAN_ID = 7;
+    public static final int SHOOTER_MOTOR_CONTROLLER_CAN_ID = 8;
     
     // Motor inversions
     public static final boolean INTAKE_IS_INVERTED = false;

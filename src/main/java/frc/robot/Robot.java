@@ -4,16 +4,17 @@
 
 package frc.robot;
 
+import com.ctre.phoenix.motorcontrol.ControlMode;
+import com.ctre.phoenix.motorcontrol.can.TalonFX;
+import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
-import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
-import edu.wpi.first.wpilibj.motorcontrol.Talon;
 
 /**
  * The VM is configured to automatically run this class, and to call the functions corresponding to
@@ -35,20 +36,15 @@ public class Robot extends TimedRobot {
     DifferentialDrive driveTrain = new DifferentialDrive(leftDriveMotorController, rightDriveMotorController);
 
     XboxController driverController = new XboxController(RobotMap.DRIVER_CONTROLLER_PORT);
-    SlewRateLimiter driveAccelerationLimiter = new SlewRateLimiter(RobotMap.RAMP_RATE); 
-    Talon leftIntakeMotorController = new Talon(RobotMap.LEFT_INTAKE_MOTOR_CONTROLLER_CHANNEL_ID);
-    Talon rightIntakeMotorController = new Talon(RobotMap.RIGHT_INTAKE_MOTOR_CONTROLLER_CHANNEL_ID);
+
+    TalonSRX leftIntakeMotorController = new TalonSRX(RobotMap.LEFT_INTAKE_MOTOR_CONTROLLER_CAN_ID);
+    TalonSRX rightIntakeMotorController = new TalonSRX(RobotMap.RIGHT_INTAKE_MOTOR_CONTROLLER_CAN_ID);
     MotorControllerGroup intakeMotorControllerGroup = new MotorControllerGroup(leftDriveMotorController, rightDriveMotorController);    
-    Talon indexerMotorController = new Talon(RobotMap.INDEXER_MOTOR_CONTROLLER_CHANNEL_ID);
-    Talon shooterFeedMotorController = new Talon(RobotMap.SHOOTER_FEED_MOTOR_CONTROLLER_CHANNEL_ID);
-    Talon shooterMotorController = new Talon(RobotMap.SHOOTER_MOTOR_CONTROLLER_CHANNEL_ID);
+    TalonSRX indexerMotorController = new TalonSRX(RobotMap.INDEXER_MOTOR_CONTROLLER_CAN_ID);
+    TalonSRX shooterFeedMotorController = new TalonSRX(RobotMap.SHOOTER_FEED_MOTOR_CONTROLLER_CAN_ID);
+    TalonFX shooterMotorController = new TalonFX(RobotMap.SHOOTER_MOTOR_CONTROLLER_CAN_ID);
 
     XboxController operatorController = new XboxController(RobotMap.OPERATOR_CONTROLLER_PORT);
-
-    SlewRateLimiter intakeRateLimiter = new SlewRateLimiter(RobotMap.RAMP_RATE);
-    SlewRateLimiter indexerRateLimiter = new SlewRateLimiter(RobotMap.RAMP_RATE);
-    SlewRateLimiter shooterFeedRateLimiter = new SlewRateLimiter(RobotMap.RAMP_RATE);
-    SlewRateLimiter shooterRateLimiter = new SlewRateLimiter(RobotMap.RAMP_RATE);
 
     Timer timer = new Timer();
 
@@ -110,10 +106,8 @@ public class Robot extends TimedRobot {
         } else {
             speedMultiplier = RobotMap.DEFAULT_SPEED_MULTIPLIER;
         }
-        double leftInput = driveAccelerationLimiter.calculate(
-            speedMultiplier*driverController.getRawAxis(RobotMap.DRIVER_LEFT_CONTROL_AXIS.value));
-        double rightInput = driveAccelerationLimiter.calculate(
-            speedMultiplier*driverController.getRawAxis(RobotMap.DRIVER_RIGHT_CONTROL_AXIS.value));
+        double leftInput = speedMultiplier*driverController.getRawAxis(RobotMap.DRIVER_LEFT_CONTROL_AXIS.value);
+        double rightInput = speedMultiplier*driverController.getRawAxis(RobotMap.DRIVER_RIGHT_CONTROL_AXIS.value);
         driveTrain.tankDrive(leftInput, rightInput);
 
         // Intake and shooter
@@ -144,10 +138,10 @@ public class Robot extends TimedRobot {
             }
         }
 
-        intakeMotorControllerGroup.set(intakeRateLimiter.calculate(intakeSpeed));
-        indexerMotorController.set(indexerRateLimiter.calculate(indexerSpeed));
-        shooterFeedMotorController.set(shooterFeedRateLimiter.calculate(shooterFeedSpeed));
-        shooterMotorController.set(shooterRateLimiter.calculate(shooterSpeed));
+        intakeMotorControllerGroup.set(intakeSpeed);
+        indexerMotorController.set(ControlMode.PercentOutput, indexerSpeed);
+        shooterFeedMotorController.set(ControlMode.PercentOutput, shooterFeedSpeed);
+        shooterMotorController.set(ControlMode.PercentOutput, shooterSpeed);
     }
 
     @Override
