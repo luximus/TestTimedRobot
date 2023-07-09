@@ -3,6 +3,7 @@ package frc.robot;
 import edu.wpi.first.wpilibj.XboxController;
 
 public final class RobotMap {
+    //// MOTOR CONFIGURATION ////
     // Motor controller channel IDs
     public static final int LEFT_DRIVE_MOTOR_CONTROLLER_CHANNEL_ID = 0;
     public static final int RIGHT_DRIVE_MOTOR_CONTROLLER_CHANNEL_ID = 1;
@@ -11,7 +12,33 @@ public final class RobotMap {
     public static final int INDEXER_MOTOR_CONTROLLER_CHANNEL_ID = 4;
     public static final int SHOOTER_FEED_MOTOR_CONTROLLER_CHANNEL_ID = 5;
     public static final int SHOOTER_MOTOR_CONTROLLER_CHANNEL_ID = 6;
+    
+    // Motor inversions
+    public static final boolean INTAKE_IS_INVERTED = false;
+    public static final boolean INDEXER_IS_INVERTED = false;
+    public static final boolean SHOOTER_FEED_IS_INVERTED = false;
+    public static final boolean SHOOTER_IS_INVERTED = false;
 
+    // Ramping
+    public static final double RAMP_RATE = 0.1;
+
+
+    //// AUTONOMOUS MODE CONFIGURATION ////
+    // Movement speeds
+    public static final double AUTONOMOUS_MOVE_SPEED = 0.3;
+    public static final double AUTONOMOUS_TURN_SPEED = 0.2;
+    public static final double LEFT_MOTOR_MOVE_STRAIGHT_ADJUSTMENT = 1.0;
+    public static final double RIGHT_MOTOR_MOVE_STRAIGHT_ADJUSTMENT = 1.0;
+
+    // Timing control
+    public static final double MOVE_FORWARD_1_START_TIME = 0.0;
+    public static final double MOVE_FORWARD_1_END_TIME = 3.0;
+    public static final double TURN_RIGHT_START_TIME = 3.5;
+    public static final double TURN_RIGHT_END_TIME = 5.5;
+    public static final double MOVE_FORWARD_2_START_TIME = 6.0;
+    public static final double MOVE_FORWARD_2_END_TIME = 9.0;
+
+    //// TELEOPERATED MODE CONFIGURATION ////
     // Input controller port numbers
     public static final int DRIVER_CONTROLLER_PORT = 0;
     public static final int OPERATOR_CONTROLLER_PORT = 1;
@@ -32,21 +59,14 @@ public final class RobotMap {
     public static final double FAST_SPEED_MULTIPLIER = 0.8;
     public static final double DEFAULT_SPEED_MULTIPLIER = 0.5;
 
-    // Ramping
-    public static final double RAMP_RATE = 0.1;
-
     // Static motor speed multipliers
     public static final double INTAKE_SPEED = 0.8;
     public static final double INTAKE_REVERSE_SPEED = 0.2;
-    public static final boolean INTAKE_IS_INVERTED = false;
     public static final double INDEXER_SPEED = 0.5;
     public static final double INDEXER_REVERSE_SPEED = 0.2;
-    public static final boolean INDEXER_IS_INVERTED = false;
     public static final double SHOOTER_FEED_SPEED = 0.8;
     public static final double SHOOTER_FEED_REVERSE_SPEED = 0.2;
-    public static final boolean SHOOTER_FEED_IS_INVERTED = false;
     public static final double SHOOTER_SPEED = 0.8;
     public static final double SHOOTER_REVERSE_SPEED = 0.2;
-    public static final boolean SHOOTER_IS_INVERTED = false;
-
+    
 }

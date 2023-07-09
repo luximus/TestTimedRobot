@@ -6,6 +6,7 @@ package frc.robot;
 
 import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.wpilibj.TimedRobot;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
@@ -34,12 +35,16 @@ public class Robot extends TimedRobot {
     MotorControllerGroup intakeMotorControllerGroup = new MotorControllerGroup(leftDriveMotorController, rightDriveMotorController);    
     Talon indexerMotorController = new Talon(RobotMap.INDEXER_MOTOR_CONTROLLER_CHANNEL_ID);
     Talon shooterFeedMotorController = new Talon(RobotMap.SHOOTER_FEED_MOTOR_CONTROLLER_CHANNEL_ID);
-    Talon shooterMotorController = new Talon(RobotMap.SHOOTER_MOTOR_CONTROLLER_CHANNEL_ID); 
+    Talon shooterMotorController = new Talon(RobotMap.SHOOTER_MOTOR_CONTROLLER_CHANNEL_ID);
+
     XboxController operatorController = new XboxController(RobotMap.OPERATOR_CONTROLLER_PORT);
+
     SlewRateLimiter intakeRateLimiter = new SlewRateLimiter(RobotMap.RAMP_RATE);
     SlewRateLimiter indexerRateLimiter = new SlewRateLimiter(RobotMap.RAMP_RATE);
     SlewRateLimiter shooterFeedRateLimiter = new SlewRateLimiter(RobotMap.RAMP_RATE);
     SlewRateLimiter shooterRateLimiter = new SlewRateLimiter(RobotMap.RAMP_RATE);
+
+    Timer timer = new Timer();
 
     @Override
     public void robotInit() {
@@ -53,19 +58,40 @@ public class Robot extends TimedRobot {
     public void robotPeriodic() {}
 
     @Override
-    public void autonomousInit() {}
-
-    @Override
-    public void autonomousPeriodic() {}
-
-    @Override
-    public void teleopInit() {
+    public void autonomousInit() {
+        timer.reset();
+        timer.start();
     }
+
+    @Override
+    public void autonomousPeriodic() {
+        double leftMotorSpeed = 0.0;
+        double rightMotorSpeed = 0.0;
+
+        if (RobotMap.MOVE_FORWARD_1_START_TIME <= timer.get() && timer.get() < RobotMap.MOVE_FORWARD_1_END_TIME) {
+            leftMotorSpeed = RobotMap.AUTONOMOUS_MOVE_SPEED * RobotMap.LEFT_MOTOR_MOVE_STRAIGHT_ADJUSTMENT;
+            rightMotorSpeed = RobotMap.AUTONOMOUS_MOVE_SPEED * RobotMap.RIGHT_MOTOR_MOVE_STRAIGHT_ADJUSTMENT;
+        }
+        if (RobotMap.TURN_RIGHT_START_TIME <= timer.get() && timer.get() < RobotMap.TURN_RIGHT_END_TIME) {
+            leftMotorSpeed = RobotMap.AUTONOMOUS_TURN_SPEED;
+            rightMotorSpeed = -RobotMap.AUTONOMOUS_TURN_SPEED;
+        }
+        if (RobotMap.MOVE_FORWARD_2_START_TIME <= timer.get() && timer.get() < RobotMap.MOVE_FORWARD_2_END_TIME) {
+            leftMotorSpeed = RobotMap.AUTONOMOUS_MOVE_SPEED * RobotMap.LEFT_MOTOR_MOVE_STRAIGHT_ADJUSTMENT;
+            rightMotorSpeed = RobotMap.AUTONOMOUS_MOVE_SPEED * RobotMap.RIGHT_MOTOR_MOVE_STRAIGHT_ADJUSTMENT;
+        }
+
+        leftDriveMotorController.set(leftMotorSpeed);
+        rightDriveMotorController.set(rightMotorSpeed);
+    }
+
+    @Override
+    public void teleopInit() {}
 
     @Override
     public void teleopPeriodic() {
         // Drive
-        double speedMultiplier;
+        final double speedMultiplier;
         if (driverController.getRawButtonPressed(RobotMap.DRIVER_SLOW_SPEED_BUTTON.value)) {
             speedMultiplier = RobotMap.SLOW_SPEED_MULTIPLIER;
         } else if (driverController.getRawButton(RobotMap.DRIVER_FAST_SPEED_BUTTON.value)) {
@@ -80,10 +106,10 @@ public class Robot extends TimedRobot {
         driveTrain.tankDrive(leftInput, rightInput);
 
         // Intake and shooter
-        double intakeSpeed;
-        double indexerSpeed;
-        double shooterFeedSpeed;
-        double shooterSpeed;
+        final double intakeSpeed;
+        final double indexerSpeed;
+        final double shooterFeedSpeed;
+        final double shooterSpeed;
         if (operatorController.getRawButton(RobotMap.OPERATOR_ALL_REVERSE_BUTTON.value)) {
             intakeSpeed = -RobotMap.INTAKE_REVERSE_SPEED;
             indexerSpeed = -RobotMap.INDEXER_REVERSE_SPEED;
