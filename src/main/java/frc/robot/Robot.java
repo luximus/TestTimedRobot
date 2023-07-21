@@ -60,10 +60,6 @@ public class Robot extends TimedRobot {
         indexerMotorController.setInverted(RobotMap.INDEXER_IS_INVERTED);
         shooterFeedMotorController.setInverted(RobotMap.SHOOTER_FEED_IS_INVERTED);
         shooterMotorController.setInverted(RobotMap.SHOOTER_IS_INVERTED);
-    }
-
-    @Override
-    public void robotPeriodic() {
         SmartDashboard.putNumber("Front left drive motor encoder position", leftFrontDriveMotorControllerEncoder.getPosition());
         SmartDashboard.putNumber("Front left drive motor encoder velocity", leftFrontDriveMotorControllerEncoder.getVelocity());
         SmartDashboard.putNumber("Rear left drive motor encoder position", leftRearDriveMotorControllerEncoder.getPosition());
@@ -73,6 +69,9 @@ public class Robot extends TimedRobot {
         SmartDashboard.putNumber("Rear right drive motor encoder position", rightRearDriveMotorControllerEncoder.getPosition());
         SmartDashboard.putNumber("Rear right drive motor encoder velocity", rightRearDriveMotorControllerEncoder.getVelocity());
     }
+
+    @Override
+    public void robotPeriodic() {}
 
     @Override
     public void autonomousInit() {
