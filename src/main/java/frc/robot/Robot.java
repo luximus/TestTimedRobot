@@ -8,6 +8,7 @@ import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import com.revrobotics.CANSparkMax;
+import com.revrobotics.RelativeEncoder;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import edu.wpi.first.wpilibj.TimedRobot;
@@ -15,6 +16,7 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 /**
  * The VM is configured to automatically run this class, and to call the functions corresponding to
@@ -28,10 +30,14 @@ public class Robot extends TimedRobot {
    * initialization code.
    */
     CANSparkMax leftFrontDriveMotorController = new CANSparkMax(RobotMap.LEFT_FRONT_DRIVE_MOTOR_CONTROLLER_CAN_ID, MotorType.kBrushless);
+    RelativeEncoder leftFrontDriveMotorControllerEncoder = leftFrontDriveMotorController.getEncoder();
     CANSparkMax leftRearDriveMotorController = new CANSparkMax(RobotMap.LEFT_REAR_DRIVE_MOTOR_CONTROLLER_CAN_ID, MotorType.kBrushless);
+    RelativeEncoder leftRearDriveMotorControllerEncoder = leftRearDriveMotorController.getEncoder();
     MotorControllerGroup leftDriveMotorController = new MotorControllerGroup(leftFrontDriveMotorController, leftRearDriveMotorController);
     CANSparkMax rightFrontDriveMotorController = new CANSparkMax(RobotMap.RIGHT_FRONT_DRIVE_MOTOR_CONTROLLER_CAN_ID, MotorType.kBrushless);
+    RelativeEncoder rightFrontDriveMotorControllerEncoder = rightFrontDriveMotorController.getEncoder();
     CANSparkMax rightRearDriveMotorController = new CANSparkMax(RobotMap.RIGHT_REAR_DRIVE_MOTOR_CONTROLLER_CAN_ID, MotorType.kBrushless);
+    RelativeEncoder rightRearDriveMotorControllerEncoder = rightRearDriveMotorController.getEncoder();
     MotorControllerGroup rightDriveMotorController = new MotorControllerGroup(rightFrontDriveMotorController, rightRearDriveMotorController);
     DifferentialDrive driveTrain = new DifferentialDrive(leftDriveMotorController, rightDriveMotorController);
 
@@ -57,7 +63,16 @@ public class Robot extends TimedRobot {
     }
 
     @Override
-    public void robotPeriodic() {}
+    public void robotPeriodic() {
+        SmartDashboard.putNumber("Front left drive motor encoder position", leftFrontDriveMotorControllerEncoder.getPosition());
+        SmartDashboard.putNumber("Front left drive motor encoder velocity", leftFrontDriveMotorControllerEncoder.getVelocity());
+        SmartDashboard.putNumber("Rear left drive motor encoder position", leftRearDriveMotorControllerEncoder.getPosition());
+        SmartDashboard.putNumber("Rear left drive motor encoder velocity", leftRearDriveMotorControllerEncoder.getVelocity());
+        SmartDashboard.putNumber("Front right drive motor encoder position", rightFrontDriveMotorControllerEncoder.getPosition());
+        SmartDashboard.putNumber("Front right drive motor encoder velocity", rightFrontDriveMotorControllerEncoder.getVelocity());
+        SmartDashboard.putNumber("Rear right drive motor encoder position", rightRearDriveMotorControllerEncoder.getPosition());
+        SmartDashboard.putNumber("Rear right drive motor encoder velocity", rightRearDriveMotorControllerEncoder.getVelocity());
+    }
 
     @Override
     public void autonomousInit() {
