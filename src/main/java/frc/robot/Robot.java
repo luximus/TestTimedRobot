@@ -6,7 +6,7 @@ package frc.robot;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
-import com.ctre.phoenix.motorcontrol.can.TalonSRX;
+import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
@@ -37,11 +37,11 @@ public class Robot extends TimedRobot {
 
     XboxController driverController = new XboxController(RobotMap.DRIVER_CONTROLLER_PORT);
 
-    TalonSRX leftIntakeMotorController = new TalonSRX(RobotMap.LEFT_INTAKE_MOTOR_CONTROLLER_CAN_ID);
-    TalonSRX rightIntakeMotorController = new TalonSRX(RobotMap.RIGHT_INTAKE_MOTOR_CONTROLLER_CAN_ID);
+    WPI_TalonSRX leftIntakeMotorController = new WPI_TalonSRX(RobotMap.LEFT_INTAKE_MOTOR_CONTROLLER_CAN_ID);
+    WPI_TalonSRX rightIntakeMotorController = new WPI_TalonSRX(RobotMap.RIGHT_INTAKE_MOTOR_CONTROLLER_CAN_ID);
     MotorControllerGroup intakeMotorControllerGroup = new MotorControllerGroup(leftDriveMotorController, rightDriveMotorController);    
-    TalonSRX indexerMotorController = new TalonSRX(RobotMap.INDEXER_MOTOR_CONTROLLER_CAN_ID);
-    TalonSRX shooterFeedMotorController = new TalonSRX(RobotMap.SHOOTER_FEED_MOTOR_CONTROLLER_CAN_ID);
+    WPI_TalonSRX indexerMotorController = new WPI_TalonSRX(RobotMap.INDEXER_MOTOR_CONTROLLER_CAN_ID);
+    WPI_TalonSRX shooterFeedMotorController = new WPI_TalonSRX(RobotMap.SHOOTER_FEED_MOTOR_CONTROLLER_CAN_ID);
     TalonFX shooterMotorController = new TalonFX(RobotMap.SHOOTER_MOTOR_CONTROLLER_CAN_ID);
 
     XboxController operatorController = new XboxController(RobotMap.OPERATOR_CONTROLLER_PORT);
