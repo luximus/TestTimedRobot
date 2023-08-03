@@ -1,6 +1,6 @@
-# FleetBot Example
+# Timed Robot Example
 
-An example FleetBot.
+An example timed robot.
 
 <span style="color:red">**WARNING: This code has not been tested.**</span>
 
