@@ -97,8 +97,7 @@ public class Robot extends TimedRobot {
             rightMotorSpeed = RobotMap.AUTONOMOUS_MOVE_SPEED * RobotMap.RIGHT_MOTOR_MOVE_STRAIGHT_ADJUSTMENT;
         }
 
-        leftDriveMotorController.set(leftMotorSpeed);
-        rightDriveMotorController.set(rightMotorSpeed);
+        driveTrain.tankDrive(leftMotorSpeed, rightMotorSpeed);
     }
 
     @Override
@@ -111,51 +110,9 @@ public class Robot extends TimedRobot {
 
     @Override
     public void teleopPeriodic() {
-        // Drive
-        final double speedMultiplier;
-        if (driverController.getRawButtonPressed(RobotMap.DRIVER_SLOW_SPEED_BUTTON.value)) {
-            speedMultiplier = RobotMap.SLOW_SPEED_MULTIPLIER;
-        } else if (driverController.getRawButton(RobotMap.DRIVER_FAST_SPEED_BUTTON.value)) {
-            speedMultiplier = RobotMap.FAST_SPEED_MULTIPLIER;
-        } else {
-            speedMultiplier = RobotMap.DEFAULT_SPEED_MULTIPLIER;
-        }
-        double leftInput = speedMultiplier*driverController.getRawAxis(RobotMap.DRIVER_LEFT_CONTROL_AXIS.value);
-        double rightInput = speedMultiplier*driverController.getRawAxis(RobotMap.DRIVER_RIGHT_CONTROL_AXIS.value);
-        driveTrain.tankDrive(leftInput, rightInput);
-
-        // Intake and shooter
-        final double intakeSpeed;
-        final double indexerSpeed;
-        final double shooterFeedSpeed;
-        final double shooterSpeed;
-        if (operatorController.getRawButton(RobotMap.OPERATOR_ALL_REVERSE_BUTTON.value)) {
-            intakeSpeed = -RobotMap.INTAKE_REVERSE_SPEED;
-            indexerSpeed = -RobotMap.INDEXER_REVERSE_SPEED;
-            shooterFeedSpeed = -RobotMap.SHOOTER_FEED_REVERSE_SPEED;
-            shooterSpeed = -RobotMap.SHOOTER_REVERSE_SPEED;
-        } else {
-            if (operatorController.getRawButton(RobotMap.OPERATOR_INTAKE_AND_INDEXER_CONTROL_BUTTON.value)) {
-                intakeSpeed = RobotMap.INTAKE_SPEED;
-                indexerSpeed = RobotMap.INDEXER_SPEED;
-            } else {
-                intakeSpeed = 0.0d;
-                indexerSpeed = 0.0d;
-            }
-
-            if (operatorController.getRawButton(RobotMap.OPERATOR_SHOOTER_CONTROL_BUTTON.value)) {
-                shooterFeedSpeed = RobotMap.SHOOTER_FEED_SPEED;
-                shooterSpeed = RobotMap.SHOOTER_SPEED;
-            } else {
-                shooterFeedSpeed = 0.0d;
-                shooterSpeed = 0.0d;
-            }
-        }
-
-        intakeMotorControllerGroup.set(intakeSpeed);
-        indexerMotorController.set(ControlMode.PercentOutput, indexerSpeed);
-        shooterFeedMotorController.set(ControlMode.PercentOutput, shooterFeedSpeed);
-        shooterMotorController.set(ControlMode.PercentOutput, shooterSpeed);
+        driveWithSpeedButtons();
+        setIntakeAndIndexer();
+        setShooterAndShooterFeed();
     }
 
     @Override
@@ -175,4 +132,57 @@ public class Robot extends TimedRobot {
 
     @Override
     public void simulationPeriodic() {}
+
+    /**
+     * Drive the robot with a tank drive, using the buttons on the driver's controller to adjust speed.
+     */
+    private void driveWithSpeedButtons() {
+        double speedMultiplier = RobotMap.DEFAULT_SPEED_MULTIPLIER;;
+        if (driverController.getRawButton(RobotMap.DRIVER_SLOW_SPEED_BUTTON.value)) {
+            speedMultiplier = RobotMap.SLOW_SPEED_MULTIPLIER;
+        }
+        if (driverController.getRawButton(RobotMap.DRIVER_FAST_SPEED_BUTTON.value)) {
+            speedMultiplier = RobotMap.FAST_SPEED_MULTIPLIER;
+        }
+        double leftInput = speedMultiplier*driverController.getRawAxis(RobotMap.DRIVER_LEFT_CONTROL_AXIS.value);
+        double rightInput = speedMultiplier*driverController.getRawAxis(RobotMap.DRIVER_RIGHT_CONTROL_AXIS.value);
+        driveTrain.tankDrive(leftInput, rightInput);  // TODO: Test tank drive in isolation
+    }
+
+    /**
+     * Set the intake and indexer motors using input from the operator's controller.
+     */
+    private void setIntakeAndIndexer() {
+        double intakeSpeed = 0.0d;
+        double indexerSpeed = 0.0d;
+        if (operatorController.getRawButton(RobotMap.OPERATOR_INTAKE_AND_INDEXER_CONTROL_BUTTON.value)) {
+            intakeSpeed = RobotMap.INTAKE_SPEED;
+            indexerSpeed = RobotMap.INDEXER_SPEED;
+        }
+        if (operatorController.getRawButton(RobotMap.OPERATOR_ALL_REVERSE_BUTTON.value)) {
+            intakeSpeed = -RobotMap.INTAKE_REVERSE_SPEED;
+            indexerSpeed = -RobotMap.INDEXER_REVERSE_SPEED;
+        }
+        intakeMotorControllerGroup.set(intakeSpeed);
+        indexerMotorController.set(ControlMode.PercentOutput, indexerSpeed);
+    }
+
+    /**
+     * Set the shooter and shooter feed motors using input from the operator's controller.
+     */
+    private void setShooterAndShooterFeed() {
+        double shooterFeedSpeed = 0.0d;
+        double shooterSpeed = 0.0d;
+        if (operatorController.getRawButton(RobotMap.OPERATOR_SHOOTER_CONTROL_BUTTON.value)) {
+            shooterFeedSpeed = RobotMap.SHOOTER_FEED_SPEED;
+            shooterSpeed = RobotMap.SHOOTER_SPEED;
+        }
+        if (operatorController.getRawButton(RobotMap.OPERATOR_ALL_REVERSE_BUTTON.value)) {
+            shooterFeedSpeed = -RobotMap.SHOOTER_FEED_REVERSE_SPEED;
+            shooterSpeed = -RobotMap.SHOOTER_REVERSE_SPEED;
+        }
+
+        shooterFeedMotorController.set(ControlMode.PercentOutput, shooterFeedSpeed);
+        shooterMotorController.set(ControlMode.PercentOutput, shooterSpeed);
+    }
 }

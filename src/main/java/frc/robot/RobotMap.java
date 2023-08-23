@@ -22,7 +22,7 @@ public final class RobotMap {
     public static final boolean SHOOTER_IS_INVERTED = false;
 
     // Ramping
-    public static final double RAMP_RATE = 0.1;
+    public static final double RAMP_RATE = 0.4;
 
 
     //// AUTONOMOUS MODE CONFIGURATION ////
@@ -46,6 +46,7 @@ public final class RobotMap {
     public static final int OPERATOR_CONTROLLER_PORT = 1;
 
     // Buttons and axes for driver control
+    // TODO: Change to raw button values using Driver Station test
     public static final XboxController.Axis DRIVER_LEFT_CONTROL_AXIS = XboxController.Axis.kLeftTrigger;
     public static final XboxController.Axis DRIVER_RIGHT_CONTROL_AXIS = XboxController.Axis.kRightTrigger;
     public static final XboxController.Button DRIVER_SLOW_SPEED_BUTTON = XboxController.Button.kLeftBumper;
