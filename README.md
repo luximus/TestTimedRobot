@@ -1,5 +1,7 @@
 # Timed Robot Example
 
+*This repository has been archived rather than deleted in the hope that it will be useful to others who are learning FIRST Robotics programming. Please be aware this code may not reflect current APIs or preferred design patterns.*
+
 An example timed robot.
 
 <span style="color:red">**WARNING: This code has not been tested.**</span>
